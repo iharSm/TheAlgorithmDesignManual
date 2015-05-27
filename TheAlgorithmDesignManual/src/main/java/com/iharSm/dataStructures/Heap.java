@@ -33,7 +33,7 @@ class Heap<T> {
 
 	private void insert(T t, int position) {
 		if (getParentPosition(position) != -1
-				&& this.tester.compare(heap[getParentPosition(position)], t) == 1) {
+				&& this.tester.compare(heap[getParentPosition(position)], t) > 0 ) {
 			heap[position] = heap[getParentPosition(position)];
 			insert(t, getParentPosition(position));
 		} else {
@@ -53,6 +53,7 @@ class Heap<T> {
 		for (T i : t)
 			insert(i);
 	}
+	
 
 	public T heapify() {
 		if (this.numberOfElements == 0)
@@ -60,29 +61,30 @@ class Heap<T> {
 
 		T root = heap[0];
 		this.numberOfElements--;
-		T t = heap[this.numberOfElements];
-
-		bubbleDown(t, 0);
+		heap[0] = heap[this.numberOfElements];
+		heap[this.numberOfElements] = null;
+		bubbleDown(0);
 
 		return root;
 	}
 
-	public void bubbleDown(T t, int pos) {
+	public void bubbleDown(int pos) {
 
 		int min = pos;
 		int left = this.getLeftChildPosition(pos);
 		for (int i = 0; i <= 1; i++) {
-			if (left + i <= this.numberOfElements) {
-				if (this.tester.compare(this.heap[left + i], t) == 1)
+			if (left + i < this.numberOfElements) {
+				if (this.tester.compare(this.heap[min], this.heap[left + i]) > 0)
 					min = left + i;
 			}
 		}
 
 		if (min != pos) {
+			T temp = this.heap[pos];
 			this.heap[pos] = this.heap[min];
-			this.heap[min] = t;
+			this.heap[min] = temp;
 
-			bubbleDown(t, min);
+			bubbleDown(min);
 		}
 	}
 
