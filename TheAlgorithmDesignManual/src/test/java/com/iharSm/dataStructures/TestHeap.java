@@ -1,9 +1,7 @@
 package com.iharSm.dataStructures;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
-
-import java.util.Arrays;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -12,7 +10,7 @@ public class TestHeap {
 	@Test
 	public void testHeapInsert_Integer_Asc() {
 		Heap<Integer> h = new Heap<Integer>(Integer.class, 5, (a, b) -> {
-			return Integer.compare(a, b);
+			return Integer.compare(a, b);	
 		});
 
 		h.insert(10);
