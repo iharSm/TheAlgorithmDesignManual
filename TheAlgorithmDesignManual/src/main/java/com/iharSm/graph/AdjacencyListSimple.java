@@ -21,18 +21,26 @@ public class AdjacencyListSimple {
 		this(false);
 	}
 	
-	public void insertEdge(EdgeNode node){
-		node.nextEdge = this.edges[node.adjacencyInfo];
-		this.edges[node.adjacencyInfo] = node;
-		this.outDegreeVertex[node.adjacencyInfo] ++;
-		numberOfVertices++;
+	public void insertEdge(int currentVertex, int neighbouringVertex, boolean isDirected){
+		EdgeNode node = new EdgeNode();
+		node.nextEdge = this.edges[currentVertex];
+		node.adjacencyInfo = neighbouringVertex;
+		this.edges[currentVertex] = node;
+		this.outDegreeVertex[currentVertex] ++;
+		
+		
+		if(!isDirected){
+			this.insertEdge(neighbouringVertex, currentVertex, true);
+		} else {
+			this.numberOfEdges++;
+		}
 	}
 	
 	
 	public class EdgeNode {
 		public int adjacencyInfo;
 		public int edgeWeight;
-		public EdgeNode nextEdge;
+		public EdgeNode nextEdge = null;
 	}
 
 	public EdgeNode[] getEdges() {
