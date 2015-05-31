@@ -2,22 +2,26 @@ package com.iharSm.graph;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.iharSm.graph.AdjacencyListSimple.EdgeNode;
 
 public class GraphAlgorithms {
 
+	private int[] parentDiscoveryRelationship;
+
 	enum VertexState {
 		DISCOVERED, PROCESSED, UNDISCOVERED
 	}
 
-	public static void bfs(AdjacencyListSimple adjList,
-			int start, Process processVertexEarly,
-			BiProcess processEdge, Process processVertexLate) {
+	public void bfs(AdjacencyListSimple adjList, int start,
+			Process processVertexEarly, BiProcess processEdge,
+			Process processVertexLate) {
 
 		LinkedList<Integer> queue = new LinkedList<Integer>();
 		VertexState[] verticesState = new VertexState[AdjacencyListSimple.maxNubmerOfVertices + 1];
-		int[] parentDiscoveryRelationship = new int[AdjacencyListSimple.maxNubmerOfVertices + 1];
+		parentDiscoveryRelationship = new int[AdjacencyListSimple.maxNubmerOfVertices + 1];
 
 		Arrays.fill(verticesState, VertexState.UNDISCOVERED);
 		Arrays.fill(parentDiscoveryRelationship, -1);
@@ -50,5 +54,33 @@ public class GraphAlgorithms {
 			}
 			processVertexLate.accept(currentVertex);
 		}
+	}
+
+	public List<Integer> findTheShortestPath(AdjacencyListSimple adjList,
+			int from, int to) {
+		List<Integer> path = new ArrayList<Integer>();
+		this.bfs(adjList, from, (p) -> {
+		}, (q, r) -> {
+		}, (s) -> {
+		});
+
+		findPath(path, from, to);
+		path.add(to);
+		return path;
+	}
+
+	private void findPath(List<Integer> path, int from, int to){
+		
+		if(from == this.getParent(to)){
+			path.add(from);
+		} else {
+			findPath(path, from, this.getParent(to));
+			path.add(this.getParent(to));
+		}
+		
+	}
+
+	public int getParent(int child) {
+		return this.parentDiscoveryRelationship[child];
 	}
 }
