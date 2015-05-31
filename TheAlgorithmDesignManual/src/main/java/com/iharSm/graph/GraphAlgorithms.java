@@ -7,7 +7,13 @@ import com.iharSm.graph.AdjacencyListSimple.EdgeNode;
 
 public class GraphAlgorithms {
 
-	public static void bfs(AdjacencyListSimple adjList, int start) {
+	enum VertexState {
+		DISCOVERED, PROCESSED, UNDISCOVERED
+	}
+
+	public static void bfs(AdjacencyListSimple adjList,
+			int start, Process processVertexEarly,
+			BiProcess processEdge, Process processVertexLate) {
 
 		LinkedList<Integer> queue = new LinkedList<Integer>();
 		VertexState[] verticesState = new VertexState[AdjacencyListSimple.maxNubmerOfVertices + 1];
@@ -26,27 +32,23 @@ public class GraphAlgorithms {
 
 		while (!queue.isEmpty()) {
 			currentVertex = queue.poll();
-			// processVertexEarly(currentVertex);
+			processVertexEarly.accept(currentVertex);
 			verticesState[currentVertex] = VertexState.PROCESSED;
 			node = adjList.getEdges()[currentVertex];
 			while (node != null) {
 				successorVertex = node.adjacencyInfo;
 				if (verticesState[successorVertex] != VertexState.PROCESSED
 						|| adjList.isDirected() == true) {
-					// processEdge(currentVertex, successorVertex);
+					processEdge.accept(currentVertex, successorVertex);
 				}
 				if (verticesState[successorVertex] == VertexState.UNDISCOVERED) {
-					queue.addFirst(successorVertex);
+					queue.add(successorVertex);
 					verticesState[successorVertex] = VertexState.DISCOVERED;
 					parentDiscoveryRelationship[successorVertex] = currentVertex;
 				}
 				node = node.nextEdge;
 			}
-			// processVertexLate(currentVertex);
+			processVertexLate.accept(currentVertex);
 		}
-	}
-
-	enum VertexState {
-		DISCOVERED, PROCESSED, UNDISCOVERED
 	}
 }

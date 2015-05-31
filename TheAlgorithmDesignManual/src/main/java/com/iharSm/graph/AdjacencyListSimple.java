@@ -12,31 +12,29 @@ public class AdjacencyListSimple {
 	/* number of edges in the graph */
 	private int numberOfEdges;
 
-	
-	public AdjacencyListSimple(boolean directed){
-		
+	public AdjacencyListSimple(boolean directed) {
+
 	}
-	
-	public AdjacencyListSimple(){
+
+	public AdjacencyListSimple() {
 		this(false);
 	}
-	
-	public void insertEdge(int currentVertex, int neighbouringVertex, boolean isDirected){
+
+	public void insertEdge(int currentVertex, int neighbouringVertex,
+			boolean isDirected) {
 		EdgeNode node = new EdgeNode();
 		node.nextEdge = this.edges[currentVertex];
 		node.adjacencyInfo = neighbouringVertex;
 		this.edges[currentVertex] = node;
-		this.outDegreeVertex[currentVertex] ++;
-		
-		
-		if(!isDirected){
+		this.outDegreeVertex[currentVertex]++;
+
+		if (!isDirected) {
 			this.insertEdge(neighbouringVertex, currentVertex, true);
 		} else {
 			this.numberOfEdges++;
 		}
 	}
-	
-	
+
 	public class EdgeNode {
 		public int adjacencyInfo;
 		public int edgeWeight;
