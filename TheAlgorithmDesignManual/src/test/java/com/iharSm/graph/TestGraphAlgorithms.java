@@ -2,6 +2,7 @@ package com.iharSm.graph;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -60,5 +61,17 @@ public class TestGraphAlgorithms {
 	@Test
 	public void testBFS_find_the_shortest_path_3_6() {
 		assertArrayEquals(gAlgo.findTheShortestPath(list, 3, 6).toArray(new Integer[4]), new Integer[] {3, 2, 1, 6});
+	}
+	
+	@Test
+	public void testFindNumberOfConnectedComponents_1(){
+		assertEquals(gAlgo.findNumberOfConnectedComponents(list), 1);
+	}
+	
+	@Test
+	public void testFindNumberOfConnectedComponents_2(){
+		list.setNumberOfVertices(8);
+		list.insertEdge(7,8, false);
+		assertEquals(gAlgo.findNumberOfConnectedComponents(list), 2);
 	}
 }
