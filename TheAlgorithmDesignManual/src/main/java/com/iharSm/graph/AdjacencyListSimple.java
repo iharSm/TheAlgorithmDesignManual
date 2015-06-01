@@ -2,9 +2,9 @@ package com.iharSm.graph;
 
 public class AdjacencyListSimple {
 
-	public static int maxNubmerOfVertices = 1000;
-	private EdgeNode[] edges = new EdgeNode[maxNubmerOfVertices + 1];
-	private int[] outDegreeVertex = new int[maxNubmerOfVertices + 1];
+	public static int maxNumberOfVertices = 1000;
+	private EdgeNode[] edges = new EdgeNode[maxNumberOfVertices + 1];
+	private int[] outDegreeVertex = new int[maxNumberOfVertices + 1];
 	private boolean directed;
 	/* number of vertices in the graph */
 	private int numberOfVertices;

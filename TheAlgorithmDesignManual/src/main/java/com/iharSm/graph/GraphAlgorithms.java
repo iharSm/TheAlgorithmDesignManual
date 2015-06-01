@@ -9,15 +9,69 @@ import com.iharSm.graph.AdjacencyListSimple.EdgeNode;
 
 public class GraphAlgorithms {
 
-	private int[] parentDiscoveryRelationship;
-	private VertexState[] verticesState = new VertexState[AdjacencyListSimple.maxNubmerOfVertices + 1];
+	private int[] enterTime = new int[AdjacencyListSimple.maxNumberOfVertices];
+	private int[] exitTime = new int[AdjacencyListSimple.maxNumberOfVertices];
+	private int[] parentDiscoveryRelationship = new int[AdjacencyListSimple.maxNumberOfVertices + 1];
+	private VertexState[] verticesState = new VertexState[AdjacencyListSimple.maxNumberOfVertices + 1];
+	private int time;
 
 	enum VertexState {
 		DISCOVERED, PROCESSED, UNDISCOVERED
 	}
-	
-	public void bfs(AdjacencyListSimple adjList, int start){
-		this.bfs(adjList, start, p -> {},	 (p,q) -> {}, p -> {});
+
+	public void dfs(AdjacencyListSimple adjList, int start) {
+		this.dfs(adjList, start, p -> {
+		}, (p, q) -> {
+		}, p -> {
+		});
+	}
+
+	public void bfs(AdjacencyListSimple adjList, int start) {
+		this.bfs(adjList, start, p -> {
+		}, (p, q) -> {
+		}, p -> {
+		});
+	}
+
+	public void dfs(AdjacencyListSimple adjList, int start,
+			Process processVertexEarly, BiProcess processVertex,
+			Process processVertexLate) {
+		Arrays.fill(verticesState, VertexState.UNDISCOVERED);
+		Arrays.fill(parentDiscoveryRelationship, -1);
+		time = 0;
+
+		recurcivedfs(adjList, start, processVertexEarly, processVertex,
+				processVertexLate);
+	}
+
+	private void recurcivedfs(AdjacencyListSimple adjList, int start,
+			Process processVertexEarly, BiProcess processVertex,
+			Process processVertexLate) {
+
+		verticesState[start] = VertexState.DISCOVERED;
+		int c = start;
+		enterTime[c] = time++;
+		processVertexEarly.accept(c);
+
+		EdgeNode current = adjList.getEdges()[c];
+		while (current != null) {
+			int v = current.adjacencyInfo;
+
+			if (verticesState[v] == VertexState.UNDISCOVERED) {
+				parentDiscoveryRelationship[v] = c;
+				processVertex.accept(c, v);
+				recurcivedfs(adjList, v, processVertexEarly, processVertex,
+						processVertexLate);
+			} else if (verticesState[v] != VertexState.UNDISCOVERED
+					|| adjList.isDirected()) {
+				processVertex.accept(c, v);
+			}
+
+			current = current.nextEdge;
+		}
+		exitTime[c] = time++;
+		processVertexLate.accept(c);
+		verticesState[c] = VertexState.PROCESSED;
 	}
 
 	public void bfs(AdjacencyListSimple adjList, int start,
@@ -25,7 +79,6 @@ public class GraphAlgorithms {
 			Process processVertexLate) {
 
 		LinkedList<Integer> queue = new LinkedList<Integer>();
-		parentDiscoveryRelationship = new int[AdjacencyListSimple.maxNubmerOfVertices + 1];
 
 		Arrays.fill(verticesState, VertexState.UNDISCOVERED);
 		Arrays.fill(parentDiscoveryRelationship, -1);
@@ -81,17 +134,17 @@ public class GraphAlgorithms {
 
 	}
 
-	public int findNumberOfConnectedComponents(AdjacencyListSimple adjList){
+	public int findNumberOfConnectedComponents(AdjacencyListSimple adjList) {
 		int counter = 1;
-		
+
 		this.bfs(adjList, 1);
-		for(int i = 1; i < adjList.getNumberOfVertices(); i++){
-			if(this.verticesState[i] == VertexState.UNDISCOVERED){
+		for (int i = 1; i < adjList.getNumberOfVertices(); i++) {
+			if (this.verticesState[i] == VertexState.UNDISCOVERED) {
 				this.bfs(adjList, i);
 				counter++;
 			}
 		}
-		
+
 		return counter;
 	}
 

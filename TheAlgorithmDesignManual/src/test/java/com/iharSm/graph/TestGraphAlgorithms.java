@@ -74,4 +74,23 @@ public class TestGraphAlgorithms {
 		list.insertEdge(7,8, false);
 		assertEquals(gAlgo.findNumberOfConnectedComponents(list), 2);
 	}
+	
+	@Test
+	public void testDfs_count_vertices(){
+		gAlgo.dfs(list, 1, (s) -> {
+			count++;
+		}, (p, q) -> {
+		}, (r) -> {
+		});
+		
+		assertTrue(count == 6);
+	}
+	
+	@Test
+	public void testDfs_number_of_edges() {
+		gAlgo.dfs(list, 1, (s) -> {
+		}, (p, q) -> listOfEdges.add(p + "->" + q), (r) -> {
+		});
+		assertTrue(listOfEdges.size() == 14);
+	}
 }
